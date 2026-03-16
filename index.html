@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>GH Perfume Store</title>
+<title>GH Perfumes</title>
 
 <style>
 
 body{
 margin:0;
 font-family:Arial;
-background:#0f0f0f;
+background:#111;
 color:white;
 }
 
@@ -21,17 +22,14 @@ nav{
 display:flex;
 justify-content:space-between;
 align-items:center;
-padding:15px 30px;
+padding:15px 40px;
 background:black;
-position:sticky;
-top:0;
-z-index:100;
 }
 
 .logo{
 font-size:26px;
-color:gold;
 font-weight:bold;
+color:gold;
 }
 
 .cartbtn{
@@ -45,40 +43,56 @@ cursor:pointer;
 /* HERO */
 
 .hero{
-height:350px;
-background:linear-gradient(to bottom,#000,#111);
+height:420px;
+background:url("https://images.unsplash.com/photo-1592945403244-b3fbafd7f539") center/cover;
 display:flex;
-justify-content:center;
 align-items:center;
+justify-content:center;
 font-size:40px;
 font-weight:bold;
-color:gold;
 }
 
 /* SEARCH */
 
 .search{
 text-align:center;
-margin:20px;
+margin:25px;
 }
 
 .search input{
 padding:10px;
-width:250px;
+width:260px;
 border-radius:8px;
 border:none;
+}
+
+/* FILTER */
+
+.filters{
+text-align:center;
+margin-bottom:20px;
+}
+
+.filters button{
+margin:5px;
+padding:8px 12px;
+border:none;
+cursor:pointer;
+border-radius:6px;
+background:#333;
+color:white;
 }
 
 /* PRODUCTS */
 
 .products{
-padding:30px;
+padding:40px;
 }
 
 .grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-gap:20px;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:25px;
 }
 
 .card{
@@ -95,7 +109,11 @@ border-radius:8px;
 
 .price{
 color:gold;
-margin:8px 0;
+margin:10px 0;
+}
+
+.rating{
+color:gold;
 }
 
 button{
@@ -103,8 +121,8 @@ border:none;
 padding:8px 12px;
 margin:4px;
 cursor:pointer;
-font-weight:bold;
 border-radius:6px;
+font-weight:bold;
 }
 
 .add{
@@ -134,6 +152,20 @@ border-bottom:1px solid #333;
 padding:10px 0;
 }
 
+/* CHECKOUT */
+
+.checkout{
+display:none;
+padding:40px;
+}
+
+.checkout input{
+display:block;
+margin:10px 0;
+padding:10px;
+width:250px;
+}
+
 /* WHATSAPP */
 
 .whatsapp{
@@ -156,6 +188,7 @@ margin-top:40px;
 }
 
 </style>
+
 </head>
 
 <body>
@@ -178,6 +211,15 @@ Luxury Perfumes
 <input type="text" placeholder="Search perfume..." id="search" onkeyup="searchProduct()">
 </div>
 
+<div class="filters">
+
+<button onclick="filterProducts('all')">All</button>
+<button onclick="filterProducts('men')">Men</button>
+<button onclick="filterProducts('women')">Women</button>
+<button onclick="filterProducts('arabic')">Arabic</button>
+
+</div>
+
 <section class="products">
 <div class="grid" id="grid"></div>
 </section>
@@ -188,12 +230,28 @@ Luxury Perfumes
 
 <div id="items"></div>
 
-<button onclick="cod()">Order Now</button>
+<button onclick="checkout()">Checkout</button>
+
+</div>
+
+<div class="checkout" id="checkoutPage">
+
+<h2>Checkout</h2>
+
+<input placeholder="Your Name">
+
+<input placeholder="Phone Number">
+
+<input placeholder="Address">
+
+<button onclick="payVisa()">Pay with Visa</button>
+
+<button onclick="cash()">Cash on Delivery</button>
 
 </div>
 
 <footer>
-© 2026 GH Perfume Store
+© 2026 GH Perfumes
 </footer>
 
 <a class="whatsapp" href="https://wa.me/201006290602">WhatsApp</a>
@@ -204,41 +262,43 @@ let cart=[]
 
 let products=[
 
-{name:"Dior Sauvage",price:390},
-{name:"Bleu de Chanel",price:390},
-{name:"Stronger With You",price:390},
-{name:"Tom Ford",price:390},
-{name:"1 Million",price:380},
-{name:"Jean Paul Gaultier",price:380},
-{name:"Valentino",price:420},
-{name:"Givenchy Gentleman",price:390},
-{name:"Gucci Flora",price:420},
-{name:"Prada",price:390},
-{name:"Versace Eros",price:380},
-{name:"Libre",price:390},
-{name:"Jadore",price:360},
-{name:"Kayali Marshmallow",price:350},
-{name:"Khamrah",price:170}
+{name:"Dior Sauvage",price:390,category:"men",img:"https://fimgs.net/mdimg/perfume/375x500.31861.jpg"},
+{name:"Bleu de Chanel",price:390,category:"men",img:"https://fimgs.net/mdimg/perfume/375x500.9099.jpg"},
+{name:"Stronger With You",price:390,category:"men",img:"https://fimgs.net/mdimg/perfume/375x500.42303.jpg"},
+{name:"Tom Ford Oud Wood",price:420,category:"men",img:"https://fimgs.net/mdimg/perfume/375x500.1825.jpg"},
+{name:"1 Million",price:380,category:"men",img:"https://fimgs.net/mdimg/perfume/375x500.3747.jpg"},
+{name:"Jean Paul Gaultier",price:380,category:"men",img:"https://fimgs.net/mdimg/perfume/375x500.430.jpg"},
+{name:"Versace Eros",price:380,category:"men",img:"https://fimgs.net/mdimg/perfume/375x500.16657.jpg"},
+
+{name:"Gucci Flora",price:420,category:"women",img:"https://fimgs.net/mdimg/perfume/375x500.10789.jpg"},
+{name:"Libre YSL",price:390,category:"women",img:"https://fimgs.net/mdimg/perfume/375x500.56077.jpg"},
+{name:"Jadore Dior",price:360,category:"women",img:"https://fimgs.net/mdimg/perfume/375x500.137.jpg"},
+{name:"Kayali Marshmallow",price:350,category:"women",img:"https://fimgs.net/mdimg/perfume/375x500.67347.jpg"},
+{name:"Yara Pink",price:320,category:"women",img:"https://fimgs.net/mdimg/perfume/375x500.78560.jpg"},
+
+{name:"Khamrah Lattafa",price:170,category:"arabic",img:"https://fimgs.net/mdimg/perfume/375x500.75805.jpg"}
 
 ]
 
 let grid=document.getElementById("grid")
 
-products.forEach(p=>{
+products.forEach((p)=>{
 
 grid.innerHTML+=`
 
-<div class="card">
+<div class="card" data-category="${p.category}">
 
-<img src="https://source.unsplash.com/300x300/?perfume">
+<img src="${p.img}">
 
 <h3>${p.name}</h3>
+
+<div class="rating">★★★★★</div>
 
 <div class="price">${p.price} EGP</div>
 
 <button class="add" onclick="add('${p.name}')">Add</button>
 
-<button class="buy" onclick="order('${p.name}')">Buy</button>
+<button class="buy" onclick="buy('${p.name}')">Buy</button>
 
 </div>
 
@@ -286,7 +346,7 @@ box.style.right=(box.style.right=="0px")?"-350px":"0px"
 
 }
 
-function order(product){
+function buy(product){
 
 let phone="201006290602"
 
@@ -298,7 +358,21 @@ window.open(url)
 
 }
 
-function cod(){
+function checkout(){
+
+document.querySelector(".products").style.display="none"
+
+document.getElementById("checkoutPage").style.display="block"
+
+}
+
+function payVisa(){
+
+window.open("PUT-YOUR-PAYMENT-LINK")
+
+}
+
+function cash(){
 
 let phone="201006290602"
 
@@ -321,6 +395,34 @@ cards.forEach(card=>{
 let name=card.innerText.toLowerCase()
 
 card.style.display=name.includes(input)?"block":"none"
+
+})
+
+}
+
+function filterProducts(type){
+
+let cards=document.querySelectorAll(".card")
+
+cards.forEach(card=>{
+
+if(type=="all"){
+
+card.style.display="block"
+
+}
+
+else if(card.dataset.category==type){
+
+card.style.display="block"
+
+}
+
+else{
+
+card.style.display="none"
+
+}
 
 })
 
