@@ -3,90 +3,272 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Perfume Store</title>
+<title>Luxury Perfume Store</title>
 
 <style>
+
 body{
-font-family: Arial;
 margin:0;
-background:#f5f5f5;
+font-family:Arial;
+background:#0f0f0f;
+color:white;
+}
+
+/* Navbar */
+
+nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 40px;
+background:black;
+}
+
+.logo{
+font-size:24px;
+color:gold;
+font-weight:bold;
+}
+
+.cartbtn{
+background:gold;
+color:black;
+padding:8px 15px;
+border-radius:20px;
+cursor:pointer;
+}
+
+/* Hero */
+
+.hero{
+height:420px;
+background:url("https://images.unsplash.com/photo-1592945403244-b3fbafd7f539") center/cover;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:40px;
+font-weight:bold;
+}
+
+/* Products */
+
+.products{
+padding:50px;
 text-align:center;
 }
 
-header{
-background:black;
-color:white;
-padding:20px;
-font-size:24px;
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:30px;
 }
 
-.container{
-display:flex;
-justify-content:center;
-gap:20px;
-padding:40px;
-flex-wrap:wrap;
-}
-
-.product{
-background:white;
+.card{
+background:#1a1a1a;
 padding:20px;
 border-radius:10px;
-width:200px;
-box-shadow:0 0 10px rgba(0,0,0,0.1);
 }
 
-.product img{
+.card img{
 width:100%;
-border-radius:10px;
+border-radius:8px;
+}
+
+.price{
+color:gold;
+margin:10px 0;
 }
 
 button{
-background:black;
-color:white;
 border:none;
 padding:10px 15px;
-margin-top:10px;
+margin:5px;
 cursor:pointer;
-border-radius:5px;
+font-weight:bold;
 }
 
-button:hover{
-background:#444;
+.add{
+background:white;
 }
+
+.buy{
+background:gold;
+}
+
+/* Cart */
+
+.cartbox{
+position:fixed;
+top:0;
+right:-400px;
+width:350px;
+height:100%;
+background:#111;
+padding:20px;
+transition:0.4s;
+overflow:auto;
+}
+
+.cartbox h2{
+margin-top:0;
+}
+
+.cartitem{
+border-bottom:1px solid #333;
+padding:10px 0;
+}
+
+/* WhatsApp */
+
+.whatsapp{
+position:fixed;
+bottom:20px;
+right:20px;
+background:#25D366;
+padding:15px 20px;
+border-radius:30px;
+color:white;
+text-decoration:none;
+font-weight:bold;
+}
+
+footer{
+background:black;
+text-align:center;
+padding:20px;
+margin-top:40px;
+}
+
 </style>
 </head>
 
 <body>
 
-<header>
-Perfume Store
-</header>
+<nav>
 
-<div class="container">
+<div class="logo">Perfume Store</div>
 
-<div class="product">
-<img src="https://images.unsplash.com/photo-1594035910387-fea47794261f">
-<h3>Tom Ford</h3>
-<p>$120</p>
-<button>Buy Now</button>
+<div class="cartbtn" onclick="toggleCart()">
+Cart (<span id="count">0</span>)
 </div>
 
-<div class="product">
-<img src="https://images.unsplash.com/photo-1615634260167-c8cdede054de">
-<h3>Yves Saint Laurent</h3>
-<p>$95</p>
-<button>Buy Now</button>
+</nav>
+
+<div class="hero">
+Luxury Perfumes
 </div>
 
-<div class="product">
+<section class="products">
+
+<h2>Our Collection</h2>
+
+<div class="grid">
+
+<div class="card">
 <img src="https://images.unsplash.com/photo-1541643600914-78b084683601">
+<h3>Tom Ford</h3>
+<div class="price">$120</div>
+<button class="add" onclick="add('Tom Ford')">Add to Cart</button>
+<button class="buy" onclick="order('Tom Ford')">Buy</button>
+</div>
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1615634260167-c8cdede054de">
+<h3>YSL</h3>
+<div class="price">$95</div>
+<button class="add" onclick="add('YSL')">Add to Cart</button>
+<button class="buy" onclick="order('YSL')">Buy</button>
+</div>
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1594035910387-fea47794261f">
 <h3>Spicebomb</h3>
-<p>$110</p>
-<button>Buy Now</button>
+<div class="price">$110</div>
+<button class="add" onclick="add('Spicebomb')">Add to Cart</button>
+<button class="buy" onclick="order('Spicebomb')">Buy</button>
+</div>
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1585386959984-a4155224a1ad">
+<h3>Jean Paul Gaultier</h3>
+<div class="price">$105</div>
+<button class="add" onclick="add('Jean Paul Gaultier')">Add to Cart</button>
+<button class="buy" onclick="order('Jean Paul Gaultier')">Buy</button>
 </div>
 
 </div>
+
+</section>
+
+<div class="cartbox" id="cartbox">
+
+<h2>Your Cart</h2>
+
+<div id="items"></div>
+
+</div>
+
+<footer>
+© 2026 Perfume Store
+</footer>
+
+<a class="whatsapp" href="https://wa.me/201006290602">WhatsApp</a>
+
+<script>
+
+let cart = []
+
+function add(product){
+
+cart.push(product)
+
+document.getElementById("count").innerText = cart.length
+
+showCart()
+
+}
+
+function showCart(){
+
+let list = ""
+
+cart.forEach(item=>{
+list += "<div class='cartitem'>" + item + "</div>"
+})
+
+document.getElementById("items").innerHTML = list
+
+}
+
+function toggleCart(){
+
+let box = document.getElementById("cartbox")
+
+if(box.style.right=="0px"){
+
+box.style.right="-400px"
+
+}else{
+
+box.style.right="0px"
+
+}
+
+}
+
+function order(product){
+
+let phone="201006290602"
+
+let message="Hello I want to order " + product
+
+let url="https://wa.me/"+phone+"?text="+encodeURIComponent(message)
+
+window.open(url)
+
+}
+
+</script>
 
 </body>
 </html>
