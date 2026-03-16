@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luxury Perfume Store</title>
+
+<title>GH Perfume Store</title>
 
 <style>
 
@@ -14,18 +15,21 @@ background:#0f0f0f;
 color:white;
 }
 
-/* Navbar */
+/* NAVBAR */
 
 nav{
 display:flex;
 justify-content:space-between;
 align-items:center;
-padding:20px 40px;
+padding:15px 30px;
 background:black;
+position:sticky;
+top:0;
+z-index:100;
 }
 
 .logo{
-font-size:24px;
+font-size:26px;
 color:gold;
 font-weight:bold;
 }
@@ -33,40 +37,55 @@ font-weight:bold;
 .cartbtn{
 background:gold;
 color:black;
-padding:8px 15px;
+padding:8px 14px;
 border-radius:20px;
 cursor:pointer;
 }
 
-/* Hero */
+/* HERO */
 
 .hero{
-height:420px;
-background:url("https://images.unsplash.com/photo-1592945403244-b3fbafd7f539") center/cover;
+height:350px;
+background:linear-gradient(to bottom,#000,#111);
 display:flex;
 justify-content:center;
 align-items:center;
 font-size:40px;
 font-weight:bold;
+color:gold;
 }
 
-/* Products */
+/* SEARCH */
+
+.search{
+text-align:center;
+margin:20px;
+}
+
+.search input{
+padding:10px;
+width:250px;
+border-radius:8px;
+border:none;
+}
+
+/* PRODUCTS */
 
 .products{
-padding:50px;
-text-align:center;
+padding:30px;
 }
 
 .grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:30px;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:20px;
 }
 
 .card{
 background:#1a1a1a;
-padding:20px;
+padding:15px;
 border-radius:10px;
+text-align:center;
 }
 
 .card img{
@@ -76,15 +95,16 @@ border-radius:8px;
 
 .price{
 color:gold;
-margin:10px 0;
+margin:8px 0;
 }
 
 button{
 border:none;
-padding:10px 15px;
-margin:5px;
+padding:8px 12px;
+margin:4px;
 cursor:pointer;
 font-weight:bold;
+border-radius:6px;
 }
 
 .add{
@@ -95,22 +115,18 @@ background:white;
 background:gold;
 }
 
-/* Cart */
+/* CART */
 
 .cartbox{
 position:fixed;
 top:0;
-right:-400px;
-width:350px;
+right:-350px;
+width:320px;
 height:100%;
 background:#111;
 padding:20px;
-transition:0.4s;
+transition:.3s;
 overflow:auto;
-}
-
-.cartbox h2{
-margin-top:0;
 }
 
 .cartitem{
@@ -118,7 +134,7 @@ border-bottom:1px solid #333;
 padding:10px 0;
 }
 
-/* WhatsApp */
+/* WHATSAPP */
 
 .whatsapp{
 position:fixed;
@@ -146,7 +162,7 @@ margin-top:40px;
 
 <nav>
 
-<div class="logo">Perfume Store</div>
+<div class="logo">GH Perfumes</div>
 
 <div class="cartbtn" onclick="toggleCart()">
 Cart (<span id="count">0</span>)
@@ -158,46 +174,12 @@ Cart (<span id="count">0</span>)
 Luxury Perfumes
 </div>
 
+<div class="search">
+<input type="text" placeholder="Search perfume..." id="search" onkeyup="searchProduct()">
+</div>
+
 <section class="products">
-
-<h2>Our Collection</h2>
-
-<div class="grid">
-
-<div class="card">
-<img src="https://images.unsplash.com/photo-1541643600914-78b084683601">
-<h3>Tom Ford</h3>
-<div class="price">$120</div>
-<button class="add" onclick="add('Tom Ford')">Add to Cart</button>
-<button class="buy" onclick="order('Tom Ford')">Buy</button>
-</div>
-
-<div class="card">
-<img src="https://images.unsplash.com/photo-1615634260167-c8cdede054de">
-<h3>YSL</h3>
-<div class="price">$95</div>
-<button class="add" onclick="add('YSL')">Add to Cart</button>
-<button class="buy" onclick="order('YSL')">Buy</button>
-</div>
-
-<div class="card">
-<img src="https://images.unsplash.com/photo-1594035910387-fea47794261f">
-<h3>Spicebomb</h3>
-<div class="price">$110</div>
-<button class="add" onclick="add('Spicebomb')">Add to Cart</button>
-<button class="buy" onclick="order('Spicebomb')">Buy</button>
-</div>
-
-<div class="card">
-<img src="https://images.unsplash.com/photo-1585386959984-a4155224a1ad">
-<h3>Jean Paul Gaultier</h3>
-<div class="price">$105</div>
-<button class="add" onclick="add('Jean Paul Gaultier')">Add to Cart</button>
-<button class="buy" onclick="order('Jean Paul Gaultier')">Buy</button>
-</div>
-
-</div>
-
+<div class="grid" id="grid"></div>
 </section>
 
 <div class="cartbox" id="cartbox">
@@ -206,53 +188,101 @@ Luxury Perfumes
 
 <div id="items"></div>
 
+<button onclick="cod()">Order Now</button>
+
 </div>
 
 <footer>
-© 2026 Perfume Store
+© 2026 GH Perfume Store
 </footer>
 
 <a class="whatsapp" href="https://wa.me/201006290602">WhatsApp</a>
 
 <script>
 
-let cart = []
+let cart=[]
+
+let products=[
+
+{name:"Dior Sauvage",price:390},
+{name:"Bleu de Chanel",price:390},
+{name:"Stronger With You",price:390},
+{name:"Tom Ford",price:390},
+{name:"1 Million",price:380},
+{name:"Jean Paul Gaultier",price:380},
+{name:"Valentino",price:420},
+{name:"Givenchy Gentleman",price:390},
+{name:"Gucci Flora",price:420},
+{name:"Prada",price:390},
+{name:"Versace Eros",price:380},
+{name:"Libre",price:390},
+{name:"Jadore",price:360},
+{name:"Kayali Marshmallow",price:350},
+{name:"Khamrah",price:170}
+
+]
+
+let grid=document.getElementById("grid")
+
+products.forEach(p=>{
+
+grid.innerHTML+=`
+
+<div class="card">
+
+<img src="https://source.unsplash.com/300x300/?perfume">
+
+<h3>${p.name}</h3>
+
+<div class="price">${p.price} EGP</div>
+
+<button class="add" onclick="add('${p.name}')">Add</button>
+
+<button class="buy" onclick="order('${p.name}')">Buy</button>
+
+</div>
+
+`
+
+})
 
 function add(product){
 
 cart.push(product)
 
-document.getElementById("count").innerText = cart.length
-
-showCart()
+updateCart()
 
 }
 
-function showCart(){
+function remove(i){
 
-let list = ""
+cart.splice(i,1)
 
-cart.forEach(item=>{
-list += "<div class='cartitem'>" + item + "</div>"
+updateCart()
+
+}
+
+function updateCart(){
+
+document.getElementById("count").innerText=cart.length
+
+let html=""
+
+cart.forEach((item,i)=>{
+
+html+=`<div class="cartitem">${item} <button onclick="remove(${i})">X</button></div>`
+
 })
 
-document.getElementById("items").innerHTML = list
+document.getElementById("items").innerHTML=html
 
 }
 
 function toggleCart(){
 
-let box = document.getElementById("cartbox")
+let box=document.getElementById("cartbox")
 
-if(box.style.right=="0px"){
-
-box.style.right="-400px"
-
-}else{
-
-box.style.right="0px"
-
-}
+box.style.right=(box.style.right=="0px")?"-350px":"0px"
 
 }
 
@@ -260,11 +290,39 @@ function order(product){
 
 let phone="201006290602"
 
-let message="Hello I want to order " + product
+let message="Hello I want to order "+product
 
 let url="https://wa.me/"+phone+"?text="+encodeURIComponent(message)
 
 window.open(url)
+
+}
+
+function cod(){
+
+let phone="201006290602"
+
+let message="Order: "+cart.join(",")
+
+let url="https://wa.me/"+phone+"?text="+encodeURIComponent(message)
+
+window.open(url)
+
+}
+
+function searchProduct(){
+
+let input=document.getElementById("search").value.toLowerCase()
+
+let cards=document.querySelectorAll(".card")
+
+cards.forEach(card=>{
+
+let name=card.innerText.toLowerCase()
+
+card.style.display=name.includes(input)?"block":"none"
+
+})
 
 }
 
